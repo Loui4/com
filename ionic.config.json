@@ -1,5 +1,7 @@
 {
   "name": "comcip",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react-vite"
 }
