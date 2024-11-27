@@ -1,29 +1,67 @@
-import { FormikInit, SelectInputField, TextInputField } from "./form";
+import {
+  DateInputField,
+  FormikInit,
+  RadioInputField,
+  SelectInputField,
+  TextInputField,
+} from "./form";
 import * as Yup from "yup";
+import { postData } from "../services/apiService"; //Import the service
+// import { useState } from "react";
+
+// const [message, setMessage] = useState('');
 
 const schema = Yup.object().shape({
-  name: Yup.string(),
-  test: Yup.string(),
-  data: Yup.string(),
+  firstName: Yup.string().required(),
+  lastName: Yup.string().required(),
+  gender: Yup.string(),
+  dob: Yup.date().required(),
+  hasDisability: Yup.string().required(),
 });
+
+const handleSubmit = async (formData: any) => {
+  console.log("form data>>>", formData);
+  try {
+    const response = await postData("/groups", formData);
+    // setMessage('Data submitted successfully!');
+    console.log("Response:", response);
+  } catch (error) {
+    // setMessage('Failed to submit data.');
+  }
+};
 
 export const SampleForm = () => {
   return (
     <FormikInit
-      onSubmit={(values: any) => console.log({ values })}
-      initialValues={{ name: "", test: "" }}
+      onSubmit={(values: any) => handleSubmit(values)}
+      initialValues={{
+        id: "",
+        firstName: "",
+        lastName: "",
+        gender: "",
+        dob: "",
+        hasDisability: "",
+      }}
       validationSchema={schema}
     >
-      <TextInputField name="name" id="name" label="Name" />
-      <TextInputField name="test" id="test" label="Test" />
+      <TextInputField name="firstName" id="first_name" label="First Name" />
+      <TextInputField name="lastName" id="last_name" label="Last Name" />
       <SelectInputField
-        name="data"
-        label="Test Data"
+        name="gender"
+        label="Gender"
         selectItems={[
           { label: "op1", value: "op1" },
           { label: "op2", value: "op2" },
           { label: "op3", value: "op3" },
+          { label: "MALE", value: "M" },
+          { label: "FEMALE", value: "F" },
         ]}
+      />
+      <DateInputField name="dob" id="dob" />
+      <RadioInputField
+        name="hasDisability"
+        id="hasDisability"
+        label="Are you Disabled?"
       />
     </FormikInit>
   );
