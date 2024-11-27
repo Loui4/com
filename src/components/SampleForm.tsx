@@ -1,15 +1,12 @@
 import {
-  DateInputField,
+  FormDatePicker,
   FormikInit,
-  RadioInputField,
+  RadioGroupInput,
   SelectInputField,
   TextInputField,
 } from "./form";
 import * as Yup from "yup";
 import { postData } from "../services/apiService"; //Import the service
-// import { useState } from "react";
-
-// const [message, setMessage] = useState('');
 
 const schema = Yup.object().shape({
   firstName: Yup.string().required(),
@@ -20,7 +17,6 @@ const schema = Yup.object().shape({
 });
 
 const handleSubmit = async (formData: any) => {
-  console.log("form data>>>", formData);
   try {
     const response = await postData("/groups", formData);
     // setMessage('Data submitted successfully!');
@@ -57,11 +53,14 @@ export const SampleForm = () => {
           { label: "FEMALE", value: "F" },
         ]}
       />
-      <DateInputField name="dob" id="dob" />
-      <RadioInputField
+      <FormDatePicker name="dob" label="Date of birth" />
+      <RadioGroupInput
+        label="Has Disability"
         name="hasDisability"
-        id="hasDisability"
-        label="Are you Disabled?"
+        options={[
+          { label: "YES", value: "YES" },
+          { label: "NO", value: "No" },
+        ]}
       />
     </FormikInit>
   );

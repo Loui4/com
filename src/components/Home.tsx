@@ -6,6 +6,6 @@ import SampleTable from "./SampleTable";
 
 export const Home = () => {
   // return isPlatform("android") ? <MobileHome /> : <WebHome />;
-  // return <SampleForm />;
-  return <SampleTable />;
+  return <SampleForm />;
+  // return <SampleTable />;
 };

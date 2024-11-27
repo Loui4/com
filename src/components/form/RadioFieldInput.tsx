@@ -1,88 +1,58 @@
+"use client";
 import React, { FC, useEffect } from "react";
-
-import { IonInput, IonItem, IonList, IonRadio, IonRadioGroup } from "@ionic/react";
+import { IonRadioGroup, IonRadio, IonLabel, IonItem } from "@ionic/react";
 import { useFormikField } from "../../hooks/UseFormikField";
 
 type Prop = {
-  id: string;
-  name: string;
   label: string;
-  width?: any;
-  type?: "password" | "text" | "date" | "number";
-  placeholder?: string;
-  rows?: number;
+  name: string;
+  options: Array<{ label: string; value: string | number }>;
   getValue?: (value: any) => void;
-  size?: "small" | "medium";
-  showHelperText?: boolean;
+  row?: boolean;
   disabled?: boolean;
-  multiline?: boolean;
-  unitOfMeasure?: string;
-  inputIcon?: any;
-  helperTextWidth?: string;
-  handleBlurEvent?: (value: any) => void;
 };
 
-export const RadioInputField: FC<Prop> = ({
-  id,
-  name,
+export const RadioGroupInput: FC<Prop> = ({
   label,
-
-  type,
-  placeholder = "",
-  size = "medium",
-  rows,
+  name,
+  options,
   getValue,
-  showHelperText = true,
+  row,
   disabled = false,
-  multiline = false,
-  inputIcon,
-  unitOfMeasure,
-  helperTextWidth = "25ch",
-  handleBlurEvent,
 }) => {
-  const { value, handleChange, hasError, errorMessage, handleBlur } =
+  const { value, handleChange, hasError, errorMessage, setFieldValue } =
     useFormikField(name);
 
-    interface Radio {
-        id: number;
-        name: string;
-    }
-
-    const radioList: Radio[] = [
-        {
-          id: 1,
-          name: 'Yes',
-        },
-        {
-          id: 2,
-          name: 'No',
-        },
-      ];
-
-const compareWith = (o1: Radio, o2: Radio) => {
-    return o1.id === o2.id;
-};
-
   useEffect(() => {
-    getValue && getValue(value);
+    if (getValue) getValue(value);
   }, [value]);
 
   return (
-    <>
-        <IonList>
-        <IonRadioGroup
-            compareWith={compareWith}
-            onIonChange={(ev) => console.log('Current value:', JSON.stringify(ev.detail.value))}
-        >
-            {radioList.map((item) => (
-            <IonItem>
-                <IonRadio key={item.id} value={item}>
-                  {item.name}
-                </IonRadio>
-            </IonItem>
-            ))}
-        </IonRadioGroup>
-        </IonList>
-    </>
+    <div style={{ display: "flex", flexDirection: "column", margin: "8px 0" }}>
+      <label htmlFor={name} style={{ marginBottom: "8px", fontWeight: "bold" }}>
+        {label}
+      </label>
+      <IonRadioGroup
+        id={name}
+        name={name}
+        value={value}
+        onIonChange={(e) => {
+          setFieldValue(name, e.detail.value);
+          handleChange(e.detail.value);
+        }}
+      >
+        {options.map(({ label, value }) => (
+          <IonItem key={value} disabled={disabled}>
+            <IonLabel>{label}</IonLabel>
+            <IonRadio slot="start" value={value} />
+          </IonItem>
+        ))}
+      </IonRadioGroup>
+      {hasError && (
+        <span style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
+          {errorMessage}
+        </span>
+      )}
+    </div>
   );
 };
