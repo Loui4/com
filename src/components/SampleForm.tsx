@@ -17,7 +17,6 @@ const schema = Yup.object().shape({
 });
 
 const handleSubmit = async (formData: any) => {
-  console.log("form data>>>", formData);
   try {
     const response = await postData("/groups", formData);
     // setMessage('Data submitted successfully!');
