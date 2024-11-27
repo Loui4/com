@@ -22,6 +22,7 @@ export const SampleForm = () => {
         selectItems={[
           { label: "op1", value: "op1" },
           { label: "op2", value: "op2" },
+          { label: "op3", value: "op3" },
         ]}
       />
     </FormikInit>
